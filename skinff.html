@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FF Show: Skin Tool & Diamonds Guide</title>
+  <meta name="description" content="The ultimate Free Fire fan companion app. Browse skins, pets, vehicles, emotes, calculate diamonds and master every rank."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:  #FF6D00;
+      --orange2: #FF9100;
+      --dark:    #0D0D0D;
+      --card:    #1A1A1A;
+      --surface: #222222;
+      --border:  #2A2A2A;
+      --text:    #FFFFFF;
+      --muted:   #9E9E9E;
+      --radius:  14px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Exo 2', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%; height: 68px;
+      background: rgba(13,13,13,.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon {
+      width: 38px; height: 38px; background: var(--orange);
+      border-radius: 10px; display: grid; place-items: center; font-size: 20px;
+    }
+    .nav-logo-text { font-size: 18px; font-weight: 900; color: var(--text); }
+    .nav-logo-text span { color: var(--orange); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600; transition: color .2s; }
+    .nav-links a:hover { color: var(--orange); }
+    .nav-cta {
+      background: var(--orange); color: #fff; border: none; cursor: pointer;
+      padding: 9px 22px; border-radius: 8px; font-family: inherit;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: var(--orange2); transform: scale(1.04); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 100px 6% 60px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -120px; right: -80px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,109,0,.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -100px; left: -100px;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,145,0,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center; width: 100%; max-width: 1200px; margin: auto;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,109,0,.12); border: 1px solid rgba(255,109,0,.3);
+      color: var(--orange); padding: 6px 14px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 20px;
+    }
+    .hero-badge::before { content: '●'; font-size: 8px; animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero h1 { font-size: clamp(2.4rem,5vw,4rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+    .hero h1 .accent { color: var(--orange); }
+    .hero-desc { color: var(--muted); font-size: 16px; max-width: 480px; margin-bottom: 36px; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: #fff;
+      padding: 14px 28px; border-radius: 12px;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: all .2s; box-shadow: 0 8px 32px rgba(255,109,0,.35);
+    }
+    .btn-primary:hover { background: var(--orange2); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,109,0,.45); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--text);
+      padding: 14px 28px; border-radius: 12px;
+      font-family: inherit; font-size: 15px; font-weight: 600;
+      text-decoration: none; border: 1px solid var(--border); cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
+    .hero-stats { display: flex; gap: 32px; margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .hero-stat-value { font-size: 26px; font-weight: 900; color: var(--orange); }
+    .hero-stat-label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .5px; }
+
+    /* Phone mockup */
+    .hero-phone { display: flex; justify-content: center; align-items: center; position: relative; }
+    .phone-glow {
+      position: absolute; width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,109,0,.18) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;
+    }
+    .phone-wrap {
+      width: 255px; height: 510px;
+      background: var(--card); border-radius: 40px;
+      border: 2px solid var(--border); overflow: hidden; position: relative;
+      box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04),
+                  0 0 60px rgba(255,109,0,.12);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    .phone-screen {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg, #1a0800 0%, #0D0D0D 40%, #0a0014 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 20px; gap: 14px;
+    }
+    .phone-appname { font-size: 22px; font-weight: 900; color: var(--orange); letter-spacing: 2px; text-align: center; }
+    .phone-sub { font-size: 9px; color: rgba(255,255,255,.45); letter-spacing: 2px; text-align: center; }
+    .phone-icon { font-size: 60px; }
+    .phone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+    .phone-tile {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 10px; padding: 10px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .phone-tile-icon { font-size: 20px; }
+    .phone-tile-label { font-size: 9px; color: var(--muted); font-weight: 600; }
+
+    /* ── SECTIONS ── */
+    section { padding: 90px 6%; }
+    .section-label {
+      display: inline-block; color: var(--orange);
+      font-size: 12px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title { font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 900; margin-bottom: 14px; }
+    .section-desc { color: var(--muted); font-size: 16px; max-width: 560px; }
+    .section-header { margin-bottom: 56px; }
+
+    /* ── FEATURES ── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,109,0,.06) 0%, transparent 60%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .feature-card:hover { border-color: rgba(255,109,0,.4); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 52px; height: 52px;
+      background: rgba(255,109,0,.12); border: 1px solid rgba(255,109,0,.2);
+      border-radius: 14px; display: grid; place-items: center;
+      font-size: 24px; margin-bottom: 18px;
+    }
+    .feature-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .feature-desc { color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+    /* ── CATEGORIES ── */
+    #categories { background: var(--card); }
+    .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 16px; }
+    .cat-card {
+      border-radius: var(--radius); padding: 28px 16px; text-align: center;
+      border: 1px solid transparent; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none; color: var(--text); display: block;
+    }
+    .cat-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+    .cat-icon { font-size: 38px; display: block; margin-bottom: 12px; }
+    .cat-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .cat-count { font-size: 12px; opacity: .6; }
+    .cat-card:nth-child(1){background:linear-gradient(135deg,#1a0500,#2a0800);border-color:rgba(255,109,0,.25);}
+    .cat-card:nth-child(2){background:linear-gradient(135deg,#00061a,#000f2a);border-color:rgba(33,150,243,.25);}
+    .cat-card:nth-child(3){background:linear-gradient(135deg,#0a001a,#180030);border-color:rgba(156,39,176,.25);}
+    .cat-card:nth-child(4){background:linear-gradient(135deg,#001a05,#002a08);border-color:rgba(76,175,80,.25);}
+    .cat-card:nth-child(5){background:linear-gradient(135deg,#001a1a,#002a2a);border-color:rgba(0,188,212,.25);}
+    .cat-card:nth-child(6){background:linear-gradient(135deg,#1a001a,#200020);border-color:rgba(233,30,99,.25);}
+    .cat-card:nth-child(7){background:linear-gradient(135deg,#1a0800,#1a0400);border-color:rgba(255,152,0,.25);}
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .step { padding: 36px 28px; border-right: 1px solid var(--border); position: relative; }
+    .step:last-child { border-right: none; }
+    .step-num { font-size: 56px; font-weight: 900; color: rgba(255,109,0,.1); line-height: 1; margin-bottom: 14px; }
+    .step-icon {
+      width: 44px; height: 44px; background: rgba(255,109,0,.12);
+      border: 1px solid rgba(255,109,0,.25); border-radius: 12px;
+      display: grid; place-items: center; font-size: 20px; margin-bottom: 14px;
+    }
+    .step-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .step-desc { color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+    /* ── DIAMONDS ── */
+    #diamonds { background: linear-gradient(160deg, #0a0400 0%, var(--dark) 40%, #000a1a 100%); }
+    .diamonds-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1100px; margin: auto; }
+    .diamonds-packages { display: flex; flex-direction: column; gap: 12px; }
+    .pkg {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 14px; transition: border-color .2s;
+    }
+    .pkg:hover { border-color: rgba(255,109,0,.4); }
+    .pkg.best { border-color: rgba(255,109,0,.5); background: rgba(255,109,0,.06); }
+    .pkg-gem { font-size: 26px; }
+    .pkg-info { flex: 1; }
+    .pkg-title { font-size: 15px; font-weight: 700; }
+    .pkg-bonus { font-size: 12px; color: #66BB6A; }
+    .pkg-price { font-size: 16px; font-weight: 800; color: var(--orange); }
+    .pkg-best-badge { background: var(--orange); color: #fff; font-size: 9px; font-weight: 800; letter-spacing: .8px; padding: 3px 8px; border-radius: 4px; }
+
+    /* ── RANKS ── */
+    .ranks-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .rank-chip {
+      padding: 10px 20px; border-radius: 30px;
+      font-size: 13px; font-weight: 700; border: 1px solid;
+      transition: transform .2s; cursor: default;
+    }
+    .rank-chip:hover { transform: scale(1.07); }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+      background: rgba(255,255,255,.03); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      display: flex; gap: 14px; align-items: flex-start;
+      max-width: 900px; margin: 0 auto;
+    }
+    .disclaimer p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ── DOWNLOAD ── */
+    #download {
+      background: linear-gradient(135deg, #1a0500, #0D0D0D 50%, #00061a);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    #download::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(255,109,0,.12) 0%, transparent 70%);
+    }
+    #download .inner { position: relative; z-index: 1; max-width: 680px; margin: auto; }
+    #download h2 { font-size: clamp(2rem,4vw,3rem); font-weight: 900; margin-bottom: 16px; }
+    #download p { color: var(--muted); font-size: 16px; margin-bottom: 36px; }
+    .store-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--card); border: 1px solid var(--border);
+      padding: 14px 24px; border-radius: 12px;
+      text-decoration: none; color: var(--text); transition: all .2s;
+    }
+    .store-btn:hover { border-color: var(--orange); transform: translateY(-2px); }
+    .store-btn-icon { font-size: 28px; }
+    .store-btn-small { font-size: 11px; color: var(--muted); }
+    .store-btn-name { font-size: 16px; font-weight: 700; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--card); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .contact-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 24px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      transition: border-color .2s;
+    }
+    .contact-item:hover { border-color: rgba(255,109,0,.4); }
+    .contact-item-icon {
+      width: 48px; height: 48px; flex-shrink: 0;
+      background: rgba(255,109,0,.1); border: 1px solid rgba(255,109,0,.2);
+      border-radius: 12px; display: grid; place-items: center; font-size: 22px;
+    }
+    .contact-item-label { font-size: 12px; color: var(--orange); font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+    .contact-item-value { font-size: 15px; font-weight: 600; }
+    .contact-item-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    /* ── FOOTER ── */
+    footer { background: #080808; border-top: 1px solid var(--border); padding: 48px 6% 28px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 36px; margin-bottom: 40px; }
+    .footer-brand { max-width: 280px; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; text-decoration: none; }
+    .footer-logo-icon { width: 36px; height: 36px; background: var(--orange); border-radius: 9px; display: grid; place-items: center; font-size: 18px; }
+    .footer-logo-text { font-size: 16px; font-weight: 900; color: var(--text); }
+    .footer-tagline { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--orange); margin-bottom: 16px; text-transform: uppercase; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+    .footer-col ul a:hover { color: var(--orange); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom p { font-size: 13px; color: var(--muted); }
+    .footer-bottom a { color: var(--muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--orange); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-grid, .diamonds-inner, .contact-grid { grid-template-columns: 1fr; }
+      .hero-phone { order: -1; }
+      .phone-wrap { width: 210px; height: 420px; }
+      .step { border-right: none; border-bottom: 1px solid var(--border); }
+      .step:last-child { border-bottom: none; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0 4%; }
+      section { padding: 60px 4%; }
+      .hero { padding: 90px 4% 50px; }
+      .hero-stats { gap: 20px; }
+      .hero-actions { flex-direction: column; }
+    }
+
+    /* ── Fade-in ── */
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🎮</div>
+    <span class="nav-logo-text">FF <span>SHOW</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#diamonds">Diamonds</a></li>
+    <li><a href="#ranks">Ranks</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#download" class="nav-cta">Download Free</a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+
+    <div class="fade-up">
+      <div class="hero-badge">FAN-MADE APP &nbsp;·&nbsp; FREE TO USE</div>
+      <h1>The Ultimate<br/><span class="accent">Free Fire</span><br/>Companion App</h1>
+      <p class="hero-desc">
+        Explore every skin, pet, weapon, vehicle &amp; emote. Calculate diamonds,
+        master every rank, generate stylish usernames — all powered live from the cloud.
+      </p>
+      <div class="hero-actions">
+        <a href="#download" class="btn-primary"><span>🤖</span> Get on Android</a>
+        <a href="#features" class="btn-secondary"><span>✦</span> Explore Features</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">7+</div>
+          <div class="hero-stat-label">Skin Categories</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">100%</div>
+          <div class="hero-stat-label">Free to Use</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">Live</div>
+          <div class="hero-stat-label">Cloud Content</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-phone fade-up">
+      <div class="phone-glow"></div>
+      <div class="phone-wrap">
+        <div class="phone-screen">
+          <div class="phone-icon">🎮</div>
+          <div class="phone-appname">FF SHOW</div>
+          <div class="phone-sub">SKIN TOOL &amp; DIAMONDS GUIDE</div>
+          <div class="phone-grid">
+            <div class="phone-tile"><span class="phone-tile-icon">👤</span><span class="phone-tile-label">Characters</span></div>
+            <div class="phone-tile"><span class="phone-tile-icon">🔫</span><span class="phone-tile-label">Weapons</span></div>
+            <div class="phone-tile"><span class="phone-tile-icon">🐾</span><span class="phone-tile-label">Pets</span></div>
+            <div class="phone-tile"><span class="phone-tile-icon">🚗</span><span class="phone-tile-label">Vehicles</span></div>
+            <div class="phone-tile"><span class="phone-tile-icon">💎</span><span class="phone-tile-label">Diamonds</span></div>
+            <div class="phone-tile"><span class="phone-tile-icon">🏆</span><span class="phone-tile-label">Ranks</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-header fade-up">
+    <span class="section-label">⚡ Features</span>
+    <h2 class="section-title">Everything a FF Fan Needs</h2>
+    <p class="section-desc">All tools and guides in one place, updated live — no app update required.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="feature-icon">🎨</div>
+      <div class="feature-title">Skin Collection</div>
+      <div class="feature-desc">Browse hundreds of skins across 7 categories — filterable by rarity (Common, Rare, Epic, Legendary, Mythic) with detailed views.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">💎</div>
+      <div class="feature-title">Diamond Calculator</div>
+      <div class="feature-desc">Enter how many diamonds you need and get the most cost-efficient package combination. Never overpay again.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">✨</div>
+      <div class="feature-title">Username Generator</div>
+      <div class="feature-desc">Generate stylish Free Fire names using Unicode fonts and symbols. Choose from dozens of variations and copy with one tap.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">🖼️</div>
+      <div class="feature-title">FF Wallpapers</div>
+      <div class="feature-desc">High-quality wallpapers for your phone screen. Full pinch-to-zoom viewer with fresh content served from the cloud.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-title">Rank Mode Guide</div>
+      <div class="feature-desc">Complete Bronze to Grandmaster breakdown — points required, proven strategies, and exclusive season-end rewards.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Tips &amp; Tricks</div>
+      <div class="feature-desc">Expert strategies on weapons, character combos, landing zones, safe-zone rotations, and ranked mode tactics.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-header fade-up">
+    <span class="section-label">🎨 Skin Tool</span>
+    <h2 class="section-title">All Skin Categories</h2>
+    <p class="section-desc">Tap any category to browse the full collection with rarity filters and detailed item pages.</p>
+  </div>
+  <div class="categories-grid fade-up">
+    <a href="#download" class="cat-card"><span class="cat-icon">👤</span><div class="cat-name">Characters</div><div class="cat-count">Skills &amp; Abilities</div></a>
+    <a href="#download" class="cat-card"><span class="cat-icon">🔫</span><div class="cat-name">Weapons</div><div class="cat-count">Stats &amp; Skins</div></a>
+    <a href="#download" class="cat-card"><span class="cat-icon">🐾</span><div class="cat-name">Pets</div><div class="cat-count">Abilities &amp; Levels</div></a>
+    <a href="#download" class="cat-card"><span class="cat-icon">🚗</span><div class="cat-name">Vehicles</div><div class="cat-count">Speed &amp; HP</div></a>
+    <a href="#download" class="cat-card"><span class="cat-icon">🪂</span><div class="cat-name">Parachutes</div><div class="cat-count">Rare Designs</div></a>
+    <a href="#download" class="cat-card"><span class="cat-icon">💃</span><div class="cat-name">Emotes</div><div class="cat-count">Animations</div></a>
+    <a href="#download" class="cat-card"><span class="cat-icon">👔</span><div class="cat-name">Bundles</div><div class="cat-count">Full Outfits</div></a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-header fade-up">
+    <span class="section-label">⚙️ How It Works</span>
+    <h2 class="section-title">3 Steps to Get Started</h2>
+  </div>
+  <div class="steps fade-up">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">📲</div>
+      <div class="step-title">Download the App</div>
+      <div class="step-desc">Install FF Show free from Google Play. No account or login needed — just open and explore instantly.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">🔍</div>
+      <div class="step-title">Browse &amp; Discover</div>
+      <div class="step-desc">Explore skins, pets, vehicles and emotes. Filter by rarity, search by name, or tap any category.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">🚀</div>
+      <div class="step-title">Level Up Your Game</div>
+      <div class="step-desc">Use the rank guide, tips, diamond calculator and username generator to stay ahead of every opponent.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIAMONDS -->
+<section id="diamonds">
+  <div class="diamonds-inner">
+    <div class="fade-up">
+      <span class="section-label">💎 Diamonds</span>
+      <h2 class="section-title">Never Overpay Again</h2>
+      <p class="section-desc" style="margin-bottom:28px;">
+        Our smart calculator finds the most cost-efficient package combination for exactly
+        the diamonds you need — plus a full guide on earning free diamonds through events.
+      </p>
+      <a href="#download" class="btn-primary" style="display:inline-flex;">
+        <span>💎</span> Try the Calculator
+      </a>
+    </div>
+    <div class="diamonds-packages fade-up">
+      <div class="pkg">
+        <span class="pkg-gem">💎</span>
+        <div class="pkg-info"><div class="pkg-title">100 Diamonds</div></div>
+        <div class="pkg-price">$0.99</div>
+      </div>
+      <div class="pkg">
+        <span class="pkg-gem">💎</span>
+        <div class="pkg-info"><div class="pkg-title">520 Diamonds</div></div>
+        <div class="pkg-price">$4.99</div>
+      </div>
+      <div class="pkg best">
+        <span class="pkg-gem">💎</span>
+        <div class="pkg-info">
+          <div class="pkg-title">2180 Diamonds</div>
+          <div class="pkg-bonus">+180 Bonus Diamonds</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+          <div class="pkg-price">$19.99</div>
+          <div class="pkg-best-badge">BEST VALUE</div>
+        </div>
+      </div>
+      <div class="pkg">
+        <span class="pkg-gem">💎</span>
+        <div class="pkg-info">
+          <div class="pkg-title">5600 Diamonds</div>
+          <div class="pkg-bonus">+600 Bonus Diamonds</div>
+        </div>
+        <div class="pkg-price">$49.99</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RANKS -->
+<section id="ranks" style="text-align:center;">
+  <div class="section-header fade-up" style="max-width:600px;margin:0 auto 48px;">
+    <span class="section-label">🏆 Rank Guide</span>
+    <h2 class="section-title">Bronze to Grandmaster</h2>
+    <p class="section-desc" style="margin:0 auto;">Complete tier breakdown with required points, proven strategies, and exclusive end-of-season rewards for every rank.</p>
+  </div>
+  <div class="ranks-row fade-up">
+    <div class="rank-chip" style="background:rgba(205,127,50,.1);border-color:rgba(205,127,50,.4);color:#CD7F32;">🥉 Bronze</div>
+    <div class="rank-chip" style="background:rgba(192,192,192,.1);border-color:rgba(192,192,192,.4);color:#C0C0C0;">🥈 Silver</div>
+    <div class="rank-chip" style="background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.4);color:#FFD700;">🥇 Gold</div>
+    <div class="rank-chip" style="background:rgba(0,188,212,.1);border-color:rgba(0,188,212,.4);color:#00BCD4;">💠 Platinum</div>
+    <div class="rank-chip" style="background:rgba(0,229,255,.1);border-color:rgba(0,229,255,.4);color:#00E5FF;">💎 Diamond</div>
+    <div class="rank-chip" style="background:rgba(156,39,176,.1);border-color:rgba(156,39,176,.4);color:#CE93D8;">⚜️ Heroic</div>
+    <div class="rank-chip" style="background:rgba(255,109,0,.1);border-color:rgba(255,109,0,.5);color:var(--orange);">👑 Grandmaster</div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download">
+  <div class="inner fade-up">
+    <h2>Ready to Play Smarter?</h2>
+    <p>Download FF Show free — no account, no login, instant access to everything.</p>
+    <a href="#" class="store-btn">
+      <span class="store-btn-icon">🤖</span>
+      <div class="store-btn-text">
+        <div class="store-btn-small">GET IT ON</div>
+        <div class="store-btn-name">Google Play</div>
+      </div>
+    </a>
+    <p style="margin-top:24px;font-size:13px;color:var(--muted);">Free download · Fan-made · No hacks or cheats</p>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section style="padding:50px 6%;">
+  <div class="disclaimer fade-up">
+    <span style="font-size:20px;flex-shrink:0;margin-top:2px;">ℹ️</span>
+    <p>
+      <strong style="color:var(--text);">Disclaimer:</strong> FF Show is a fan-made app and is
+      <strong style="color:var(--text);">NOT affiliated with, endorsed, sponsored, or approved</strong>
+      by Garena or any official Free Fire entity. All trademarks and game assets belong to their respective owners.
+      This app does not provide hacks, cheats, or unauthorized free diamonds. All content is for informational and entertainment purposes only.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header fade-up">
+    <span class="section-label">📬 Contact</span>
+    <h2 class="section-title">Get in Touch</h2>
+    <p class="section-desc">Have a question, suggestion, or want to report an issue? We'd love to hear from you.</p>
+  </div>
+  <div class="contact-grid fade-up">
+    <div class="contact-item">
+      <div class="contact-item-icon">📧</div>
+      <div>
+        <div class="contact-item-label">EMAIL</div>
+        <div class="contact-item-value">contact@azteconline-apps.org</div>
+        <div class="contact-item-sub">We reply within 24–48 hours</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-icon">🌐</div>
+      <div>
+        <div class="contact-item-label">WEBSITE</div>
+        <div class="contact-item-value">azteconline-apps.org</div>
+        <div class="contact-item-sub">Fan apps &amp; game guides</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-icon">🎮</div>
+        <span class="footer-logo-text">FF Show</span>
+      </a>
+      <p class="footer-tagline">The ultimate fan-made Free Fire companion. Skins, diamonds, guides — all in one free app.</p>
+    </div>
+    <div class="footer-col">
+      <h4>App</h4>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#categories">Skin Categories</a></li>
+        <li><a href="#diamonds">Diamonds</a></li>
+        <li><a href="#ranks">Rank Guide</a></li>
+        <li><a href="#download">Download</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 FF Show · Fan-made app, not affiliated with Garena or Free Fire.</p>
+    <p>
+      <a href="#">Privacy Policy</a> &nbsp;·&nbsp;
+      <a href="#">Terms</a> &nbsp;·&nbsp;
+      <a href="mailto:contact@azteconline-apps.org">contact@azteconline-apps.org</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Scroll fade-in
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach((el, i) => {
+    el.style.transitionDelay = (i % 6) * 70 + 'ms';
+    obs.observe(el);
+  });
+
+  // Mobile nav toggle
+  let menuOpen = false;
+  function toggleMenu() {
+    menuOpen = !menuOpen;
+    const links = document.querySelector('.nav-links');
+    const cta = document.querySelector('.nav-cta');
+    if (menuOpen) {
+      links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(13,13,13,.97);padding:24px 6%;gap:20px;border-bottom:1px solid #2A2A2A;z-index:99;backdrop-filter:blur(16px);';
+      cta.style.display = 'block';
+      cta.style.cssText = 'display:block;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;padding:14px 40px;font-size:15px;';
+    } else {
+      links.style.cssText = '';
+      cta.style.cssText = '';
+    }
+  }
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => { menuOpen = true; toggleMenu(); });
+  });
+</script>
+</body>
+</html>
